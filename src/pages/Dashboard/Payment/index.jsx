@@ -1,3 +1,3 @@
-export default function Payment() {
-  return 'Pagamento: Em breve!';
+export default function processPayment(){
+    return ('process...')
 }
