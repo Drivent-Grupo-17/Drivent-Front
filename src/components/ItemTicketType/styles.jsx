@@ -5,7 +5,7 @@ export const TicketTypeItem = styled.li`
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  width: 145px;
+  width: ${({width}) => width? width : "145px"};
   height: 145px;
   border-radius: 20px;
   border: 1px solid #CECECE;

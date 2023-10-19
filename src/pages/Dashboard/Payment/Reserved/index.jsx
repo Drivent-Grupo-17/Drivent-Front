@@ -5,7 +5,7 @@ import { toast } from 'react-toastify';
 import { StyledTypography } from "../../../../components/PersonalInformationForm/index.jsx";
 import { ConfirmationArea, Container, Content, FinishOrderMessage, HotelsOptionsList, Instruction, Message, OrderPrice, ReservationButton, TicketsTypeList } from "./styles.jsx";
 import TicketType from "../../../../components/ItemTicketType/index.jsx";
-import { getTicketsTypes, createTicketReservation } from "../../../../services/ticketsApi.js";
+import { getTicketsTypes, createTicketReservation, getTickets } from "../../../../services/ticketsApi.js";
 import { useNavigate } from "react-router";
 import { Price, TicketTypeItem, Type } from "../../../../components/ItemTicketType/styles.jsx";
 
