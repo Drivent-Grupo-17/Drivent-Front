@@ -42,3 +42,15 @@ export const Content = styled.div`
   width: 100%;
   flex-direction: column;
 `;
+
+export const PaymentConfirmed = styled.div`
+    width:500px;
+    display:flex;
+`
+export const PaymentConfirmedContent = styled.div`
+    display:flex;
+    flex-direction:column;
+    align-items: flex-start;
+    margin-left:20px;
+`
+
