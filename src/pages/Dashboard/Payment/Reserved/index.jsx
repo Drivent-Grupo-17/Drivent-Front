@@ -5,8 +5,9 @@ import { toast } from 'react-toastify';
 import { StyledTypography } from "../../../../components/PersonalInformationForm/index.jsx";
 import { ConfirmationArea, Container, Content, FinishOrderMessage, HotelsOptionsList, Instruction, Message, OrderPrice, ReservationButton, TicketsTypeList } from "./styles.jsx";
 import TicketType from "../../../../components/ItemTicketType/index.jsx";
-import { getTicketsTypes,createTicketReservation } from "../../../../services/ticketsApi.js";
+import { getTicketsTypes, createTicketReservation } from "../../../../services/ticketsApi.js";
 import { useNavigate } from "react-router";
+import { Price, TicketTypeItem, Type } from "../../../../components/ItemTicketType/styles.jsx";
 
 
 export default function Payment() {
@@ -15,6 +16,7 @@ export default function Payment() {
   const [ticketsTypes, setTicketsTypes] = useState([]);
   const [selectedTicket, setSelectedTicket] = useState(null);
   const [hotelOption, setHotelOption] = useState({ option: null, value: null });
+  const [selectedWithHotel,setSelectedWithHotel] = useState(false)
   const navigate = useNavigate()
 
 
@@ -64,9 +66,11 @@ export default function Payment() {
 
   async function checkReservation() {
     try {
-      const data = await getTicket(userData.token);
-      
-      if (data) navigate('/dashboard/processPayment');
+      const data = await getTickets(userData.token);
+      if (data) {
+        navigate('/dashboard/processPayment')
+      } else {
+      }
     } catch (error) {
       console.log(`error ${error}`);
     }
@@ -93,39 +97,57 @@ export default function Payment() {
                   (ticket.isRemote === false && ticket.includesHotel === true) ||
                   (ticket.isRemote === true)
                 ) {
-                  return(
-                    <TicketType 
-                      isRemote={ticket.isRemote} 
-                      ticket={ticket.name} 
-                      includesHotel={ticket.includesHotel} 
-                      price={ticket.price} 
+                  return (
+                    <TicketType
+                      isRemote={ticket.isRemote}
+                      ticket={ticket.name}
+                      includesHotel={ticket.includesHotel}
+                      price={ticket.price}
                       key={ticket.id}
                       id={ticket.id}
-                      selectedTicket= {selectedTicket}
-                      setSelectedTicket = {setSelectedTicket}
+                      selectedTicket={selectedTicket}
+                      setSelectedTicket={setSelectedTicket}
                       currentTicket={ticket}
-                      setHotelOption = {setHotelOption}
+                      setHotelOption={setHotelOption}
                     />
                   );
                 }
               })}
             </TicketsTypeList>
 
-            {selectedTicket ? 
+            {selectedTicket ?
               <>
                 {!selectedTicket.isRemote && selectedTicket.includesHotel ?
-                  <Instruction>Ótimo! Agora escolha sua modalidade de hospedagem</Instruction> :
-                  <ConfirmationArea>
-                    <FinishOrderMessage>Fechado! O total ficou em <OrderPrice>R$ {`${parseInt(selectedTicket.price/100)}`}</OrderPrice>. Agora é só confirmar:</FinishOrderMessage>
+                  <>
+                    <Instruction>Ótimo! Agora escolha sua modalidade de hospedagem</Instruction>
+                    <TicketsTypeList>
+                      <TicketTypeItem selected={selectedWithHotel}
+                        onClick={() => { setSelectedTicket({ ...selectedTicket, includesHotel: true,price:35000 }); setSelectedWithHotel(true)}}>
+                        <Type>Com Hotel</Type>
+                        <Price>+ R$350</Price>
+                      </TicketTypeItem>
+                      <TicketTypeItem selected={!selectedTicket.includesHotel? true : false} 
+                        onClick={() => {setSelectedTicket({ ...selectedTicket, includesHotel: false,price:25000});setSelectedWithHotel(false)}}>
+                        <Type>Sem Hotel</Type>
+                        <Price>+ R$00</Price>
+                      </TicketTypeItem>
+                    </TicketsTypeList>
+                  </>
+                  : <ConfirmationArea>
+                    <FinishOrderMessage>Fechado! O total ficou em <OrderPrice>R$ {`${parseInt(selectedTicket.price / 100)}`}</OrderPrice>. Agora é só confirmar:</FinishOrderMessage>
                     <ReservationButton onClick={() => handleReservation(selectedTicket.id)}>RESERVAR INGRESSO</ReservationButton>
                   </ConfirmationArea>
                 }
+                {selectedWithHotel && !selectedTicket.isRemote ? <ConfirmationArea>
+                    <FinishOrderMessage>Fechado! O total ficou em <OrderPrice>R$ {`${parseInt(selectedTicket.price / 100)}`}</OrderPrice>. Agora é só confirmar:</FinishOrderMessage>
+                    <ReservationButton onClick={() => handleReservation(selectedTicket.id)}>RESERVAR INGRESSO</ReservationButton>
+                  </ConfirmationArea>: ""}
 
                 {(!selectedTicket.isRemote && selectedTicket.includesHotel === true) || !selectedTicket.includesHotel === false ?
                   <>
-                  <HotelsOptionsList>
+                    <HotelsOptionsList>
 
-                  </HotelsOptionsList>
+                    </HotelsOptionsList>
                   </>
                   : ''
                 }
