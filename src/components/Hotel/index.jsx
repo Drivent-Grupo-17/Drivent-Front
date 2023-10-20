@@ -10,6 +10,7 @@ import { HotelUnique } from './HotelComponent/index';
 export default function HotelComponent() {
   const { userData } = useContext(UserContext);
   const [hotels, setHotels] = useState([]);
+  const [selected, setSelected] = useState(null);
 
   useEffect(() => {
     hotelsList();
@@ -26,9 +27,12 @@ export default function HotelComponent() {
       <Instruction>Primeiro, escolha seu hotel</Instruction>
       <Container>
         <HotelsContainer>
-          {hotels.map((element) => (
-            <HotelUnique />
-          ))}
+          {hotels.map((element) => {
+            if (element.capacity - element.bookings === 0) {
+            } else {
+              return <HotelUnique hotel={element} selected={selected} setSelected={setSelected} />;
+            }
+          })}
         </HotelsContainer>
       </Container>
     </>

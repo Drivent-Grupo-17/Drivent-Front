@@ -8,4 +8,8 @@ export const Container = styled.div`
 export const HotelsContainer = styled.section`
   width: 100%;
   height: 100%;
+
+  display: flex;
+  flex-shrink: 0;
+  gap: 19px;
 `;
