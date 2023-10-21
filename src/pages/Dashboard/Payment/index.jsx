@@ -29,27 +29,22 @@ export default function processPayment() {
     }
     return (
         <>
-            <StyledTypography>
-                Ingresso e pagamento
-            </StyledTypography>
+            <StyledTypography variant="h4">Ingresso e pagamento</StyledTypography>
             <Container>
-                <Content>
-                    <Instruction>Ingresso escolhido</Instruction>
-                    <TicketsTypeList>
-                        <TicketTypeItem selected={true} width={"400px"}>
-                            <Type>Presencial + com hotel</Type>
-                            <Price>+R$350</Price>
-                        </TicketTypeItem>
-                    </TicketsTypeList>
-                    <Instruction>Pgamento</Instruction>
-                    {selectedTicket.status === "PAID" ? <PaymentConfirmed>
-                        <img src={Group} alt="" />
-                        <PaymentConfirmedContent>
-                            <Type>Pagamento confirmado!!</Type>
-                            <Price>Prossiga para a escolha de hospedagem e atividades</Price>
-                        </PaymentConfirmedContent>
-                    </PaymentConfirmed> : ""}
-                </Content>
+                <TextConfirmation>Ingresso Escolhido</TextConfirmation>
+                <CardConfirmation>
+                    <h2>{
+                        ticket?.TicketType.name === 'Online' ? ticket?.TicketType.name
+                            : ticket?.TicketType.name === 'Presencial' && ticket?.TicketType.includesHotel === true ? `${ticket?.TicketType.name} + Com Hotel`
+                                : `${ticket?.TicketType.name} + Sem Hotel`
+                    }</h2>
+                    <h3>{`R$ ${(parseInt(ticket?.TicketType.price / 100) + ((ticket?.TicketType.includesHotel === true ? 35000 : 0) / 100))}`}</h3>
+                </CardConfirmation>
+
+                <TextConfirmation>Pagamento</TextConfirmation>
+                
+                <PaymentCreditCard/>
+
             </Container>
         </>
     )
