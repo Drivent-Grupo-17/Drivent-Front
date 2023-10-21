@@ -7,16 +7,29 @@ import { getHotels, getRoomsByHotelId } from '../../services/hotelsApi.js';
 import { Container, HotelsContainer, RoomsContainer } from './styles';
 import { HotelUnique } from './HotelComponent/index';
 import Room from './RoomComponent';
+import { getTickets, getTicketsTypes } from '../../services/ticketsApi';
 
 export default function HotelComponent() {
   const { userData } = useContext(UserContext);
   const [hotels, setHotels] = useState([]);
   const [rooms, setRooms] = useState([]);
   const [selected, setSelected] = useState(null);
-
+  const [ticket, SetTicket] = useState({})
+  const [ticketType, SetTicketType] = useState({})
   useEffect(() => {
     hotelsList();
+    getUserTicket()
   }, []);
+
+  async function getUserTicket() {
+    const response = await getTickets(userData.token)
+    const ticketType = await getTicketsTypes(userData.token)
+    
+    if (response) {
+      SetTicketType(ticketType)
+      SetTicket(response)
+    }
+  }
 
   async function hotelsList() {
     const response = await getHotels(userData.token);
@@ -31,43 +44,60 @@ export default function HotelComponent() {
     });
     setRooms(array);
   }
-  console.log(rooms);
-  return (
-    <>
-      <StyledTypography variant="h4">Escolha de hotel e quarto</StyledTypography>
-      <Instruction>Primeiro, escolha seu hotel</Instruction>
-      <Container>
-        <HotelsContainer>
-          {hotels.map((element) => {
-            if (element.capacity - element.bookings === 0) {
-            } else {
-              return (
-                <HotelUnique
-                  key={element.id}
-                  hotel={element}
-                  selected={selected}
-                  setSelected={setSelected}
-                  roomsList={roomsList}
-                />
-              );
-            }
-          })}
-        </HotelsContainer>
-        {rooms.length !== 0 ? (
-          <div>
-            <Instruction>Ótima pedida! Agora escolha seu quarto:</Instruction>
-            <RoomsContainer>
-              {rooms.map((element) => (
-                <Room key={element.id} room={element} />
-              ))}
-            </RoomsContainer>
-          </div>
-        ) : (
-          ''
-        )}
-      </Container>
-    </>
-  );
+  console.log(ticket);
+
+  if (ticket.status !== "PAID") {
+     return (
+      <>
+       <StyledTypography variant="h4">Escolha de hotel e quarto</StyledTypography>
+       <Instruction>Você precisa ter confirmado pagamento antes de fazer a escolha de hospedagem</Instruction>
+      </>
+     )
+  } else if (ticket.ticketTypeId !== 1) {
+    return (
+      <>
+       <StyledTypography variant="h4">Escolha de hotel e quarto</StyledTypography>
+       <Instruction>Sua modalidade de ingresso não inclui hospedagem Prossiga para a escolha de atividades</Instruction>
+      </>
+     )
+  } else {
+    return (
+      <>
+        <StyledTypography variant="h4">Escolha de hotel e quarto</StyledTypography>
+        <Instruction>Primeiro, escolha seu hotel</Instruction>
+        <Container>
+          <HotelsContainer>
+            {hotels.map((element) => {
+              if (element.capacity - element.bookings === 0) {
+              } else {
+                return (
+                  <HotelUnique
+                    key={element.id}
+                    hotel={element}
+                    selected={selected}
+                    setSelected={setSelected}
+                    roomsList={roomsList}
+                  />
+                );
+              }
+            })}
+          </HotelsContainer>
+          {rooms.length !== 0 ? (
+            <div>
+              <Instruction>Ótima pedida! Agora escolha seu quarto:</Instruction>
+              <RoomsContainer>
+                {rooms.map((element) => (
+                  <Room key={element.id} room={element} />
+                ))}
+              </RoomsContainer>
+            </div>
+          ) : (
+            ''
+          )}
+        </Container>
+      </>
+    );
+  }
 }
 
 const StyledTypography = styled(Typography)`
