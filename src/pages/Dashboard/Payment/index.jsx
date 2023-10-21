@@ -20,7 +20,7 @@ export default function processPayment() {
         try {
             const data = await getTickets(userData.token);
             if (data) {
-                setSelectedTicket({ ...selectedTicket, status: "PAID" })
+                setSelectedTicket({ ...selectedTicket})
             } else {
             }
         } catch (error) {
