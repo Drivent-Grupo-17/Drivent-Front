@@ -5,9 +5,9 @@ import { toast } from 'react-toastify';
 import { StyledTypography } from "../../../../components/PersonalInformationForm/index.jsx";
 import { ConfirmationArea, Container, Content, FinishOrderMessage, HotelsOptionsList, Instruction, Message, OrderPrice, ReservationButton, TicketsTypeList, HotelsOptionsItem, Description, HotelPrice } from "./styles.jsx";
 import TicketType from "../../../../components/ItemTicketType/index.jsx";
-import { getTicketsTypes, createTicketReservation, getTickets } from "../../../../services/ticketsApi.js";
+import { getTicketsTypes, createTicketReservation } from "../../../../services/ticketsApi.js";
 import { useNavigate } from "react-router";
-// import { getTickets } from "../../../../services/ticketsApi.js";
+import { getTickets } from "../../../../services/ticketsApi.js";
 
 export default function Payment() {
   const { userData } = useContext(UserContext);
