@@ -12,7 +12,7 @@ export default function Room(props) {
     }
   }
   return (
-    <Container>
+    <Container isFull={capacity === _count.Booking} disabled={capacity === _count.Booking}>
       <p>{name}</p>
       <div>
         {capacityArray.map((element) => {

@@ -28,3 +28,13 @@ export const RoomsContainer = styled.section`
   flex-shrink: 0;
   gap: 8px 17px;
 `;
+
+export const ErrorContainer = styled.div`
+  width: 80%;
+  height: 80%;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+`;
