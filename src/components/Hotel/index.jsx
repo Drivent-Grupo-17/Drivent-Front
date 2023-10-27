@@ -16,6 +16,8 @@ export default function HotelComponent() {
   const [selected, setSelected] = useState(null);
   const [ticket, SetTicket] = useState({})
   const [ticketType, SetTicketType] = useState({})
+  const [selectedRoom, setSelectedRoom] = useState(null);
+
   useEffect(() => {
     hotelsList();
     getUserTicket()
@@ -24,12 +26,13 @@ export default function HotelComponent() {
   async function getUserTicket() {
     const response = await getTickets(userData.token)
     const ticketType = await getTicketsTypes(userData.token)
-    
+    console.log(JSON.stringify(response.data))
     if (response) {
       SetTicketType(ticketType)
       SetTicket(response)
     }
   }
+
 
   async function hotelsList() {
     const response = await getHotels(userData.token);
@@ -44,7 +47,7 @@ export default function HotelComponent() {
     });
     setRooms(array);
   }
-  console.log(ticket);
+
 
   if (ticket.status !== "PAID") {
      return (
@@ -53,7 +56,7 @@ export default function HotelComponent() {
        <Instruction>Você precisa ter confirmado pagamento antes de fazer a escolha de hospedagem</Instruction>
       </>
      )
-  } else if (ticket.ticketTypeId !== 1) {
+  } else if (ticket.TicketType.includesHotel == false ) {
     return (
       <>
        <StyledTypography variant="h4">Escolha de hotel e quarto</StyledTypography>
@@ -87,7 +90,8 @@ export default function HotelComponent() {
               <Instruction>Ótima pedida! Agora escolha seu quarto:</Instruction>
               <RoomsContainer>
                 {rooms.map((element) => (
-                  <Room key={element.id} room={element} />
+                  <Room key={element.id} room={element} selectedRoom={selectedRoom}
+                  setSelectedRoom={setSelectedRoom} />
                 ))}
               </RoomsContainer>
             </div>

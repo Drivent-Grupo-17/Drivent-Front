@@ -124,7 +124,6 @@ export default function Payment() {
 
                 {selectedTicket ?
                   <>
-                    {console.log(selectedTicket)}
                     {!selectedTicket.isRemote && selectedTicket.includesHotel ?
                       <Instruction>Ótimo! Agora escolha sua modalidade de hospedagem</Instruction>
                       :

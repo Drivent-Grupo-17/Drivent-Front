@@ -36,7 +36,6 @@ export async function createTicketPayment(token, body) {
       Authorization: `Bearer ${token}`,
     }
   });
-  console.log(response.data)
   return response.data;
 }
 
