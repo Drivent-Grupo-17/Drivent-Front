@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 
-export const Container = styled.div`
+export const Container = styled.main`
   width: 100%;
   /* height: 90%; */
 
@@ -27,4 +27,14 @@ export const RoomsContainer = styled.section`
   flex-wrap: wrap;
   flex-shrink: 0;
   gap: 8px 17px;
+`;
+
+export const ErrorContainer = styled.div`
+  width: 80%;
+  height: 80%;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
 `;
