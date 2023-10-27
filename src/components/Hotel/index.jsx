@@ -32,17 +32,25 @@ export default function HotelComponent() {
   }
 
   async function hotelsList() {
-    const response = await getHotels(userData.token);
-    setHotels(response);
+    try {
+      const response = await getHotels(userData.token);
+      setHotels(response);
+    } catch (error) {
+      console.log(error);
+    }
   }
 
   async function roomsList(hotelId) {
-    const response = await getRoomsByHotelId(hotelId, userData.token);
-    let array = [];
-    array = response.Rooms.map((element) => {
-      return { ...element };
-    });
-    setRooms(array);
+    try {
+      const response = await getRoomsByHotelId(hotelId, userData.token);
+      let array = [];
+      array = response.Rooms.map((element) => {
+        return { ...element };
+      });
+      setRooms(array);
+    } catch (error) {
+      console.log(error);
+    }
   }
   console.log(ticket);
 
