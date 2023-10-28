@@ -1,35 +1,57 @@
 import { Container } from './styles';
 import { BsPerson, BsPersonFill } from 'react-icons/bs';
+import { useEffect, useState } from 'react';
+import styled from 'styled-components';
 
 export default function Room(props) {
   const { id, name, capacity, _count } = props.room;
-  const { selectedRoom, setSelectedRoom } = props
+  const { selectedRoom, setSelectedRoom, userRoom } = props;
+  const [isFull, setIsFull] = useState(false);
+  const [ocupation, setOcupation] = useState(null);
 
-  
+  useEffect(() => {
+    const array = [];
 
-  let capacityArray = [];
-  for (let i = 0; i < capacity; i++) {
-    if (i < _count.Booking) {
-      capacityArray.push(true);
+    if (capacity === _count.Booking) {
+      setIsFull(true);
     } else {
-      capacityArray.push(false);
+      setIsFull(false);
     }
-  }
 
+    const available = capacity - _count.Booking;
+
+    for (let i = 0; i < available; i++) {
+      if (selectedRoom === id && (i + 1 >= available)) {
+        array.push('selected');
+      } else {
+        array.push('free');
+      }
+    }
+
+    for (let i = 0; i < _count.Booking; i++) {
+      array.push('reserved');
+    }
+
+    setOcupation(array);
+  }, [selectedRoom, _count.Booking, capacity, id, userRoom?.id]);
 
   return (
-    <Container onClick={() => setSelectedRoom(id)} selected={selectedRoom === id}>
-
+    <Container
+      disabled={isFull || userRoom?.id === id}
+      isfull={isFull.toString() || (userRoom?.id === id).toString()}
+      onClick={() => setSelectedRoom(id)}
+      selected={selectedRoom === id}
+    >
       <p>{name}</p>
       <div>
-        {capacityArray.map((element) => {
-          if (!element) {
-            return <BsPerson key={Math.random().toString()} style={{ fontSize: '24px' }} />;
-          } else {
-            return <BsPersonFill key={Math.random().toString()} style={{ fontSize: '24px' }} />;
-          }
-        })}
+        {ocupation?.map((o, index) => o === 'free' ?
+          <BsPerson key={index} /> :
+          <BsPersonFill key={index} className={o} />
+        )}
       </div>
+
     </Container>
   );
 }
+
+
