@@ -28,7 +28,7 @@ export const ButtonContainer = styled.button`
   align-items: center;
   flex-direction: column;
 
-  cursor: ${({disabled}) => disabled === false ? 'pointer' : 'default'};
+  cursor: ${({disabled}) => disabled ? 'default' : 'pointer'};
 
   img {
     margin: 0 20px;

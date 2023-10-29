@@ -26,6 +26,7 @@ export const Activitie = ({ data, getActivities }) => {
     .getMinutes()
     .toString()
     .padStart(2, '0')}`;
+    
   const handleSubscription = async () => {
     console.log('a');
     const date = data.startsAt.split('T')[0];
