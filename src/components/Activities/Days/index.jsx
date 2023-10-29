@@ -10,7 +10,7 @@ export default function DayComponent(props) {
   const date = `${dateArray[2]}/${dateArray[1]}`;
 
   return (
-    <Container selected={selected === date ? true : false} onClick={() => handleClick(date)}>
+    <Container selected={selected === date ? true : false} onClick={() => handleClick(date,startsAt)}>
       <Typography variant="subtitle1" style={{ fontSize: '14px' }}>
         {day}, {date}
       </Typography>
