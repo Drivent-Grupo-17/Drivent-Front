@@ -2,18 +2,19 @@ import { Typography } from '@mui/material';
 import { Instruction } from '../../pages/Dashboard/Payment/Reserved/styles';
 import styled from 'styled-components';
 import { useContext, useEffect, useState } from 'react';
-import { getDays } from '../../services/activitiesApi';
+import { getActivities, getDays } from '../../services/activitiesApi';
 import UserContext from '../../contexts/UserContext';
-import { Container, DaysContainer } from './styles';
+import { Container, DaysContainer, TabbleColumnsContainer, TabbleContainer, TableColumns, TableColumnsTitle } from './styles';
 import DayComponent from './Days';
+import { Activitie } from './activitie';
 
 export default function ActivitiesComponent() {
   const [daysActivity, setDays] = useState([]);
   const { userData } = useContext(UserContext);
   const [selected, setSelected] = useState(null);
-
+  const [activities, setActivities] = useState([]);
   useEffect(() => {
-    getDaysOfActivity();
+    getDaysOfActivity()
   }, []);
 
   const getDaysOfActivity = async () => {
@@ -31,12 +32,17 @@ export default function ActivitiesComponent() {
     }
   };
 
-  function handleClick(day) {
+  function handleClick(day, selecteDay) {
     setSelected(day);
+    getActivitiesByDat(selecteDay)
   }
 
-  console.log(daysActivity);
+  async function getActivitiesByDat(selectedDay) {
+    const activiti = await getActivities(selectedDay, userData.token)
+    setActivities(activiti)
+  }
 
+  console.log(activities)
   return (
     <>
       <StyledTypography variant="h4">Escolha de atividades</StyledTypography>
@@ -44,9 +50,44 @@ export default function ActivitiesComponent() {
       <Container>
         <DaysContainer>
           {daysActivity.map((element) => (
-            <DayComponent key={element.startsAt} day={element} handleClick={handleClick} selected={selected}/>
+            <DayComponent key={element.startsAt} day={element} handleClick={handleClick} selected={selected} />
           ))}
         </DaysContainer>
+        <TabbleContainer>
+          <TabbleColumnsContainer>
+            <TableColumnsTitle>Auditorio Principal</TableColumnsTitle>
+            <TableColumns>
+              {activities.map((act) => {
+                if (act.location === "Auditório Principal") {
+                  return <Activitie key={act.id} data={act} />
+                }
+              })
+              }
+            </TableColumns>
+          </TabbleColumnsContainer>
+          <TabbleColumnsContainer>
+            <TableColumnsTitle>Auditorio Central</TableColumnsTitle>
+            <TableColumns borderoff={true}>
+              {activities.map((act) => {
+                if (act.location === "Auditório Lateral") {
+                  return <Activitie key={act.id} data={act} />
+                }
+              })
+              }
+            </TableColumns>
+          </TabbleColumnsContainer>
+          <TabbleColumnsContainer>
+            <TableColumnsTitle>Auditorio Lateral</TableColumnsTitle>
+            <TableColumns>
+            {activities.map((act) => {
+                if (act.location === "Sala de Workshop") {
+                  return <Activitie key={act.id} data={act} />
+                }
+              })
+              }
+            </TableColumns>
+          </TabbleColumnsContainer>
+        </TabbleContainer>
       </Container>
     </>
   );
