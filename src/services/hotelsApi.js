@@ -9,7 +9,7 @@ export async function getHotels(token) {
   return response.data;
 }
 
-export async function getRoomsByHotelId(hotelId, token) {
+export async function getRoomsByHotelId(token, hotelId) {
   const response = await api.get(`/hotels/${hotelId}`, {
     headers: {
       Authorization: `Bearer ${token}`,
